@@ -1,0 +1,57 @@
+package com.rcpl.firstapp;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+public class OrientationSensorActivity extends AppCompatActivity implements SensorEventListener
+{   RelativeLayout layout;
+    TextView tv;
+    SensorManager sm;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {   super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_orientation_sensor);
+        layout = (RelativeLayout)findViewById(R.id.myscreen);
+        tv = (TextView)findViewById(R.id.textView1);
+        sm = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        Sensor s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sm.registerListener( this, s, SensorManager.SENSOR_DELAY_NORMAL);
+
+    }//end  of onCreate()
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent)
+    {     int x = (int)(sensorEvent.values[0]*100);
+          int y = (int)(sensorEvent.values[1]*100);
+          int z = (int)(sensorEvent.values[2]*100);
+        layout.setBackgroundColor(Color.rgb(x , y , z));
+         String str = "X=" + x + "\n";
+         str = str + "Y=" + y + "\n";
+         str = str + "Z=" + z ;
+         tv.setText(str);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i)
+    {
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
