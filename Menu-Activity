@@ -1,0 +1,67 @@
+package com.rcpl.firstapp;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+public class MenuActivity extends ListActivity
+{
+    String []arr = {"MainActivity", "LCDemoActivity", "LoginActivity", "EventDemoActivity",
+            "IntentDemoActivity", "VibrationActivity", "SpinnerActivity",
+            "RadioActivity", "ImageResourceActivity", "AlertDialogActivity",
+            "ToggleSwitchActivity","DateTimeActivity", "OptionsMenuActivity",
+            "WallpaperActivity", "SharedPreferencesActivity", "ProgressBarActivity",
+            "SeekBarActivity","SDCardActivity", "VideoActivity","DealActivity","CameraActivity",
+            "NotificationActivity", "ListViewActivity", "PreferencesFromXml","PreferenceUseActivity",
+            "CustomListActivity","ProximitySensorActivity", "OrientationSensorActivity",
+            "GPSDemoActivity", "DatabaseActivity","DatabaseAddActivity","DatabaseViewActivity","DatabaseDeleteActivity","DatabaseView2Activity","DatabaseUpdateActivity","DynamicListActivity","BluetoothActivity","WifiActivity",
+            "MyBroadcastReceiver","MyBroadcastReceiver2","ServiceDemoActivity","Database2Activity","SecondActivity", "EXIT"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {   super.onCreate(savedInstanceState);
+        
+        // setContentView(R.layout.activity_menu); Not required in ListActivity
+        ArrayAdapter adapter = new ArrayAdapter(
+             this, android.R.layout.simple_list_item_1, arr);
+        setListAdapter(adapter);
+    }//end of onCreate()
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id)
+    {  super.onListItemClick(l, v, position, id);
+        String message = arr[position];
+        Toast t = Toast.makeText(this, "You Clicked on=" + message, Toast.LENGTH_SHORT );
+        t.show();
+
+        if(message.equals("EXIT") )
+        {     finish();
+        }
+        else
+        {
+            message = "com.rcpl.firstapp" + "." + message;
+            try
+            {   Class c = Class.forName(message);
+                Intent intent = new Intent(MenuActivity.this,  c );
+                Toast.makeText(this,"**********************.",Toast.LENGTH_SHORT).show();
+
+                Log.d("JEETENDRA", "************************* before intent sending");
+                startActivity(intent);
+
+            }
+            catch (Exception e)
+            {   Toast.makeText(this,"Screen Not Yet Designed.",Toast.LENGTH_SHORT).show();
+                Log.d("EXCEPTION", "************************* " +e);
+            }
+
+        }//end of else bloc
+
+    }
+}
