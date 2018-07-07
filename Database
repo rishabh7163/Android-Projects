@@ -1,0 +1,72 @@
+package com.rcpl.firstapp;
+
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class DatabaseActivity extends AppCompatActivity
+{  TableLayout tableLayout;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_database);
+
+        SQLiteDatabase db = openOrCreateDatabase("RCPL_DB", MODE_APPEND, null);
+
+        db.execSQL("create table if not exists Student(name varchar, phone varchar) ");
+        Toast.makeText(this , "Table is available", Toast.LENGTH_LONG).show();
+
+        db.execSQL("insert into Student(name,phone) values('Jeetendra' , '9999999') ");
+        db.execSQL("insert into Student  values('Obama' , '88888888') ");
+        db.execSQL("insert into Student  values('Sachin' , '77777777') ");
+        db.execSQL("insert into Student  values('Pappu' , '66666666') ");
+        db.execSQL("insert into Student  values('Modi' ,  '55555555') ");
+        Toast.makeText(this , "All records saved successfully.", Toast.LENGTH_LONG).show();
+
+        //Code for record deletion
+        String n = "Pappu";
+        n = "'"  +  n   + "'";
+        db.execSQL("delete from Student where name ="  + n );
+        Toast.makeText(this, "Record Deleted " , Toast.LENGTH_LONG).show();
+
+        //Code to edit the record
+        String nm  =  "Sachin";
+        String newPh =  "22222222";
+        nm  = "'" + nm  + "'";
+        newPh = "'" + newPh + "'" ;
+        db.execSQL("update Student set phone=" + newPh + " where name=" +nm );
+        Toast.makeText(this, "Record Updated Successfully. " , Toast.LENGTH_LONG).show();
+
+
+        tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
+        TableRow tr;
+        Cursor c =  db.rawQuery("select * from Student" , null );
+        String name , phone;
+        while( c.moveToNext() )
+        {   name = c.getString(0) ;
+            phone = c.getString(1);
+            tr = new TableRow(this);
+            TextView tv1  = new TextView(this);
+            TextView tv2  = new TextView(this);
+            tv1.setText(name);
+            tv2.setText(phone);
+            tr.addView(tv1);
+            tr.addView(tv2);
+            tableLayout.addView(tr);
+        }//end of while loop
+        db.close();
+
+    }//end of onCreate()
+
+}//end of DatabaseActivity
+
+
+//1. execSQL() - for any type of query except SELECT Queries
+//2. rawQuery()   - for  SELECT Queries
