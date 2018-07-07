@@ -1,0 +1,48 @@
+package com.rcpl.firstapp;
+
+import android.app.DatePickerDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+
+public class DateTimeActivity extends AppCompatActivity {
+    EditText et1;
+    String str;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {   super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_date_time);
+        et1 = (EditText)findViewById(R.id.editText1);
+    }//end of onCreate()
+
+    public void openCanlendar(View v)
+    {   MyDateChooser ref =  new MyDateChooser();
+        Date date = new Date();
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(date);
+        int yy = gc.get(Calendar.YEAR);
+        int mm = gc.get(Calendar.MONTH);
+        int dd = gc.get(Calendar.DATE);
+        DatePickerDialog dialog=new DatePickerDialog(
+                            this, ref , yy, mm , dd );
+        dialog.show();
+    }//end of openCanlendar()
+
+    class MyDateChooser implements DatePickerDialog.OnDateSetListener
+    {   @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth)
+        {   str = year+ "-" + (month+1) + "-" + dayOfMonth;
+            et1.setText(str);
+        }
+    }//end of MyDateChooser
+
+
+}//end of the class
