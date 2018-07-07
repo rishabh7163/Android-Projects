@@ -1,0 +1,70 @@
+package com.rcpl.firstapp;
+
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+public class SDCardActivity extends AppCompatActivity
+{
+     EditText et1 , et2;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {   super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sdcard);
+        et1 = (EditText)findViewById(R.id.editText1);
+        et2 = (EditText)findViewById(R.id.editText2);
+    }
+
+    public void save(View v) //Declaratic event handler
+    {  String n = et1.getText().toString();
+       String ph = et2.getText().toString();
+       try
+       {   File rootpath = Environment.getExternalStorageDirectory();
+           File f =new File(rootpath, "ContactsData.txt");
+           if(f.exists() == false)
+           {   f.createNewFile();
+               Toast.makeText(this, "New ContactsData.txt file created.",Toast.LENGTH_LONG).show();
+           }
+           String details = n + ":"  + ph + "\n";
+           FileOutputStream fos = new FileOutputStream(f, true);
+           fos.write( details.getBytes() );
+           Toast.makeText(this, "Data Saved Successfully.", Toast.LENGTH_SHORT ).show();
+       }
+       catch (Exception e)
+       {  Toast.makeText(this, "Data Not Saved."+e, Toast.LENGTH_SHORT ).show();
+       }
+    }//end of save()
+    public void read(View v) //Declaratic event handler
+    {   try
+        {  File rootpath = Environment.getExternalStorageDirectory();
+            File f =  new File(rootpath, "ContactsData.txt");
+            if( f.exists() )
+            {   FileInputStream fis =  new FileInputStream(f);
+                String data= "";
+                while(true)
+                { int a = fis.read();
+                    if( a == -1)
+                    {   break;
+                    }
+                  data = data +  (char)a ;
+                }//end of while loop
+                Toast.makeText(this, data , Toast.LENGTH_LONG).show();
+            }
+            else
+            {Toast.makeText(this, "Data Not Available",  Toast.LENGTH_LONG).show();
+            }
+        }
+        catch(Exception e)
+        {  Toast.makeText(this, "Some Error :" + e,  Toast.LENGTH_LONG).show();
+        }//end of catch block
+
+    }//end of read() method
+
+}
